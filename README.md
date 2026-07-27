@@ -1,69 +1,144 @@
-Soil Texture Classification Using Sentinel-2 and Landsat-9 Imagery with Machine Learning
+# Soil Texture Classification Using Sentinel-2 and Landsat-9
 
-This repository contains the essential code, models, and relevant files for our soil texture classification project conducted over Semnan Province, Iran, as part of our Master's project at Politecnico di Milano.
+An end-to-end remote sensing and machine learning workflow for mapping clay- and sand-dominated soils at two depth intervals in Semnan Province, Iran.
 
-📦 Project Structure
+## Project Overview
 
+This project investigates the use of freely available Sentinel-2 and Landsat-9 imagery for soil texture classification across a 143.9 km² arid region in Semnan Province, Iran.
+
+Spectral bands and indices were combined with 3,000 SoilGrids samples to classify clay and sand content at two soil depths:
+
+- 0–5 cm (surface soil)
+- 5–15 cm (subsurface soil)
+
+Random Forest (RF) and Support Vector Machine (SVM) classifiers were trained and evaluated using five-fold cross-validation. Random Forest consistently outperformed SVM across both sensors, soil components, and depth intervals.
+
+## Study Data
+
+| Dataset | Description |
+|---|---|
+| Sentinel-2 | Cloud-free Level-2A image acquired on 28 May 2024 |
+| Landsat-9 | Surface reflectance image acquired on 26 May 2024 |
+| SoilGrids | 3,000 soil samples containing clay and sand information |
+| Study area | 143.9 km² in Semnan Province, Iran |
+| Soil depths | 0–5 cm and 5–15 cm |
+
+## Methodology
+
+The project was implemented through the following workflow:
+
+1. Satellite image acquisition and preprocessing
+2. Cloud and cloud-shadow masking
+3. Study-area clipping
+4. Spectral-band extraction
+5. Vegetation and soil index calculation
+6. SoilGrids sample preparation
+7. Satellite-value extraction at sample locations
+8. Correlation and regression analysis
+9. Class balancing using SMOTE
+10. Random Forest and SVM model training
+11. Five-fold cross-validation
+12. Accuracy and Cohen’s Kappa evaluation
+13. Feature-importance analysis
+14. Production of classified soil texture maps
+
+## Spectral Features
+
+The analysis included satellite spectral bands and several vegetation and soil-related indices:
+
+- NDVI
+- SAVI
+- EVI
+- MCARI
+- IRECI
+- MTCI
+- S2REP
+
+## Machine Learning Models
+
+### Random Forest
+
+Random Forest was implemented with 100 decision trees and the Gini impurity criterion. It produced the strongest and most stable results across all configurations.
+
+### Support Vector Machine
+
+SVM was implemented using the Radial Basis Function kernel. Its performance was generally lower than Random Forest, particularly for clay classification.
+
+## Model Performance
+
+### Sentinel-2 Results
+
+| Soil component | Depth | Model | Accuracy | Kappa |
+|---|---:|---|---:|---:|
+| Clay | 0–5 cm | RF | 83.51% | 0.670 |
+| Clay | 0–5 cm | SVM | 54.46% | 0.089 |
+| Clay | 5–15 cm | RF | 82.84% | 0.657 |
+| Clay | 5–15 cm | SVM | 53.22% | 0.065 |
+| Sand | 0–5 cm | RF | 87.44% | 0.749 |
+| Sand | 0–5 cm | SVM | 61.48% | 0.230 |
+| Sand | 5–15 cm | RF | 87.45% | 0.749 |
+| Sand | 5–15 cm | SVM | 59.90% | 0.198 |
+
+### Landsat-9 Results
+
+| Soil component | Depth | Model | Accuracy | Kappa |
+|---|---:|---|---:|---:|
+| Clay | 0–5 cm | RF | 83.12% | 0.662 |
+| Clay | 0–5 cm | SVM | 53.97% | 0.079 |
+| Clay | 5–15 cm | RF | 82.68% | 0.654 |
+| Clay | 5–15 cm | SVM | 52.28% | 0.046 |
+| Sand | 0–5 cm | RF | **89.49%** | **0.790** |
+| Sand | 0–5 cm | SVM | 72.67% | 0.454 |
+| Sand | 5–15 cm | RF | 89.18% | 0.784 |
+| Sand | 5–15 cm | SVM | 69.51% | 0.390 |
+
+## Key Findings
+
+- Random Forest consistently outperformed SVM across all configurations.
+- The best result was obtained using Landsat-9 and Random Forest for surface sand classification.
+- The best-performing model achieved 89.49% accuracy and a Kappa coefficient of 0.790.
+- Sentinel-2 and Random Forest achieved 87.45% accuracy for subsurface sand classification.
+- Landsat-9 showed strong performance for sand mapping, supported by its SWIR bands and EVI.
+- Sentinel-2 red-edge bands and IRECI contributed strongly to clay discrimination.
+- Both sensors demonstrated potential for scalable soil texture mapping in arid and semi-arid environments.
+
+## Technologies
+
+- Python
+- Google Earth Engine
+- Rasterio
+- Pandas
+- NumPy
+- Scikit-learn
+- Matplotlib
+- Sentinel-2
+- Landsat-9
+- SoilGrids
+
+## Repository Structure
+
+```text
+SoilTexture-Classification/
+├── Sentinel-2/
+│   ├── preprocessing and index-calculation scripts
+│   ├── machine-learning scripts
+│   ├── trained models
+│   └── classified maps
+├── Landsat-9/
+│   ├── preprocessing and index-calculation scripts
+│   ├── machine-learning scripts
+│   ├── trained models
+│   └── classified maps
+├── feature_importance_plots/
+├── Other/
+│   └── SoilGrids_Points.csv
+└── README.md
 ```
-/Sentinel2              Sentinel-2 data, codes, models, outputs  
-/Landsat9               Landsat-9 data, codes, models, outputs  
-/Feature_Importance_Plots  Feature importance visualizations  
-/Other                  Additional files, including SoilGrids points  
-```
 
-🗂 Contents
+## Project Context
 
-Sentinel2 Folder:
+Developed as part of the MSc in Geoinformatics Engineering at Politecnico di Milano.
 
-* Preprocessed satellite data (e.g., `Sentinel2_Ordered_FullBands.tif`)
-* Calculated indices (e.g., `Sentinel2_Bands_and_Indices.tif`)
-* Ground truth data (`GroundTruth_Sentinel2.csv`)
-* Python scripts for:
-
-  * Sensitivity and correlation analysis
-  * Model training and evaluation (RF & SVM)
-  * Image processing and classification
-* Trained model files (`*.pkl`) and classified maps (`*.tif`)
-
-Landsat9 Folder:
-
-* Similar structure as Sentinel-2 for Landsat-9 workflow
-* Includes band data, indices, ground truth, codes, models, and classification maps
-
-Feature\_Importance\_Plots:
-
-* Visual outputs showing feature importance for model interpretation
-
-Other:
-
-* `SoilGrids_Points.csv`: Contains the 3,000 ground truth soil texture points used for training and evaluation
-
-🛠 Methods
-
-* **Data Preprocessing**: Clipping, atmospheric correction, spectral index calculation
-* **Feature Screening**: Correlation & regression analysis to select relevant features
-* **Machine Learning**: Random Forest (RF) and Support Vector Machine (SVM)
-* **Model Evaluation**: Overall Accuracy, Kappa Coefficient, Confusion Matrix
-* **Tools Used**: Python (`scikit-learn`, `pandas`, `rasterio`, etc.) and Google Earth Engine for data extraction
-
-📋 Notes
-
-* The `.pkl` files are saved trained models for reproducibility
-* `.tif` files include both raw and classified maps for visual validation
-* The codes are organized for both Sentinel-2 and Landsat-9 workflows separately
-* This repository is shared for project verification and academic purposes only
-
----
-
-👨‍🏫 Project Details
-
-* **Project Title**: Soil Texture Classification Using Multitemporal Landsat-9 and Sentinel-2 Data Combined with Machine Learning Techniques
-* **Institution**: Politecnico di Milano - Master of Science in Geoinformatics Engineering
-* **Supervision**: Prof. Mariagrazia Fugini & Prof. Giovanna Venuti
-* **Authors**: Hafizullah Sarwary & Ali Moeinkhah
-
----
-
-📝 Disclaimer
-
-The dataset and codes are provided strictly for project evaluation and academic use. Redistribution or commercial use is not permitted.
+- **Authors:** Ali Moeinkhah and Hafizullah Sarwary
+- **Supervisors:** Prof. Mariagrazia Fugini and Prof. Giovanna Venuti
+- **Academic year:** 2024–2025
