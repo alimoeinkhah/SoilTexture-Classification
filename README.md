@@ -13,6 +13,8 @@ Spectral bands and indices were combined with 3,000 SoilGrids samples to classif
 
 Random Forest (RF) and Support Vector Machine (SVM) classifiers were trained and evaluated using five-fold cross-validation. Random Forest consistently outperformed SVM across both sensors, soil components, and depth intervals.
 
+![Study area in Semnan Province](assets/study-area.png)
+
 ## Study Data
 
 | Dataset | Description |
@@ -41,6 +43,9 @@ The project was implemented through the following workflow:
 12. Accuracy and Cohen’s Kappa evaluation
 13. Feature-importance analysis
 14. Production of classified soil texture maps
+
+
+![Methodology workflow](assets/methodology-workflow.png)
 
 ## Spectral Features
 
@@ -91,6 +96,29 @@ SVM was implemented using the Radial Basis Function kernel. Its performance was 
 | Sand | 0–5 cm | SVM | 72.67% | 0.454 |
 | Sand | 5–15 cm | RF | 89.18% | 0.784 |
 | Sand | 5–15 cm | SVM | 69.51% | 0.390 |
+
+
+### Performance Comparison
+
+#### Surface Soil (0–5 cm)
+
+![Model performance at 0–5 cm](assets/model-performance-0-5cm.png)
+
+#### Subsurface Soil (5–15 cm)
+
+![Model performance at 5–15 cm](assets/model-performance-5-15cm.png)
+
+
+## Classified Soil Maps
+
+### Landsat-9
+
+![Landsat-9 classified soil maps](assets/landsat9-classified-maps.png)
+
+### Sentinel-2
+
+![Sentinel-2 classified soil maps](assets/sentinel2-classified-maps.png)
+
 
 ## Key Findings
 
